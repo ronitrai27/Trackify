@@ -1,9 +1,11 @@
 import React from "react";
-
+// import Sidebar from "../components/Sidebar";
+import Main from "../components/Main";
 const Home = () => {
   return (
-    <div>
-      <h1 className="text-red-500"> hello home</h1>
+    <div className="">
+      {/* <Sidebar /> */}
+      <Main />
     </div>
   );
 };

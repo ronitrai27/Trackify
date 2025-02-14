@@ -1,28 +1,56 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { AuroraText } from "../components/magicui/aurora-text";
 import { styled } from "styled-components";
+import axios from "axios";
+
 const Registration = () => {
   const [state, setState] = useState("sign up");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [name, setName] = useState("");
+  const [industry, setIndustry] = useState("");
+  const navigate = useNavigate();
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        {
+          name,
+          email,
+          password: pass,
+          industry,
+        }
+      );
+
+      console.log(response.data);
+      toast.success("registered successfully");
+      localStorage.setItem("userEmail", email);
+      navigate("/");
+    } catch (error) {
+      console.error(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.message || "Registration failed");
+    }
   };
+
   return (
-    <div className="border-t-[1px] bg-[#3b74ef35] h-screen font-inter">
+    <div className="border-t-[1px] bg-[#aebdd835] h-screen font-inter">
+      {/* <ToastContainer /> */}
       <div className="header-top flex items-center gap-2 px-10 mt-6">
         <img src={assets.logo} alt="" className="w-10" />
         <p className="text-[26px] font-semibold text-black tracking-tight">
           Trackify
         </p>
       </div>
-      <div className="flex items-center justify-center mt-14 ">
-        <div class="border border-gray-100 shadow-xl w-[420px] p-8 rounded-md bg-white">
-          <div class="flex justify-between text-sm">
-            <div class="flex items-center gap-2">
+      <div className="flex items-center justify-center mt-8 ">
+        <div className="border border-gray-100 shadow-xl w-[420px] p-8 rounded-md bg-white">
+          <div className="flex justify-between text-sm">
+            <div className="flex items-center gap-2">
               <img src={assets.logo} alt="" className="w-10 -mt-3" />
             </div>
             <div>
@@ -31,7 +59,7 @@ const Registration = () => {
                   Have an account?
                   <button
                     href="#"
-                    class="font-semibold text-blue-600 hover:underline ml-1"
+                    className="font-semibold text-blue-600 hover:underline ml-1"
                     onClick={() => setState("login")}
                   >
                     Log in
@@ -42,7 +70,7 @@ const Registration = () => {
                   New to Zipserve?
                   <button
                     href="#"
-                    class="font-semibold text-blue-600 hover:underline ml-1"
+                    className="font-semibold text-blue-600 hover:underline ml-1"
                     onClick={() => setState("sign up")}
                   >
                     Create Account
@@ -52,108 +80,127 @@ const Registration = () => {
             </div>
           </div>
 
-          <div class="mt-10">
+          <div className="mt-10">
             {state === "sign up" ? (
-              <h1 class="text-[27px] font-semibold leading-9">
+              <h1 className="text-[27px] font-semibold leading-9">
                 <AuroraText>Register</AuroraText> & Manage Your Supply
               </h1>
             ) : (
-              <h1 class="text-[27px] font-semibold">
-                {" "}
+              <h1 className="text-[27px] font-semibold">
                 <AuroraText>Welcome</AuroraText> Back!
               </h1>
             )}
           </div>
-          <p class="text-[16px] mt-4">
-            Trackify , Where Business meets{" "}
+          <p className="text-[16px] mt-4">
+            Trackify, Where Business meets{" "}
             <span className="text-[#3b75ef] text-[18px] italic font-medium">
               AI
             </span>
           </p>
+          <form onSubmit={onSubmitHandler}>
+            {" "}
+            <div className="mt-6">
+              <StyledWrapper>
+                {state === "sign up" && (
+                  <div className="input-group mb-4">
+                    <input
+                      required
+                      type="text"
+                      name="username"
+                      autoComplete="off"
+                      className="input"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    <label className="user-label">Username</label>
+                  </div>
+                )}
 
-          <div className="mt-6">
-            <StyledWrapper>
-              {state === "sign up" && (
                 <div className="input-group mb-4">
                   <input
                     required
                     type="text"
-                    name="username"
+                    name="email"
+                    autoComplete="on"
+                    className="input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <label className="user-label">Email</label>
+                </div>
+
+                <div className="input-group">
+                  <input
+                    required
+                    type="password"
+                    name="password"
                     autoComplete="off"
                     className="input"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={pass}
+                    onChange={(e) => setPass(e.target.value)}
                   />
-                  <label className="user-label">Username</label>
+                  <label className="user-label">Password</label>
                 </div>
-              )}
 
-              <div className="input-group mb-4">
-                <input
-                  required
-                  type="text"
-                  name="email"
-                  autoComplete="on"
-                  className="input"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <label className="user-label">Email</label>
-              </div>
+                {state === "sign up" && (
+                  <div className="input-group">
+                    <select
+                      required
+                      className="input"
+                      value={industry}
+                      onChange={(e) => setIndustry(e.target.value)}
+                    >
+                      <option value="" disabled>
+                        Select Organisation
+                      </option>
 
-              <div className="input-group">
-                <input
-                  required
-                  type="password"
-                  name="password"
-                  autoComplete="off"
-                  className="input"
-                  value={pass}
-                  onChange={(e) => setPass(e.target.value)}
-                />
-                <label className="user-label">Password</label>
-              </div>
-            </StyledWrapper>
-          </div>
-
-          <div className="mt-4 flex items-center">
-            <StyledWrapper>
-              <label className="container">
-                <input type="checkbox" />
-                <svg viewBox="0 0 64 64" height="1em" width="1em">
-                  <path
-                    d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
-                    pathLength="575.0541381835938"
-                    className="path"
-                  />
-                </svg>
-              </label>
-            </StyledWrapper>
-            {
-              <label class="ml-2 text-sm text-gray-600" for="terms">
-                I agree to the
-                <a class="text-blue-600 hover:underline" href="#">
-                  Terms and Conditions
-                </a>
-              </label>
-            }
-          </div>
-
-          {state === "sign up" ? (
-            <button
-              type="submit"
-              class="bg-blue-600 text-white text-sm h-10 w-[130px] rounded-md font-semibold mt-5 shadow-md hover:bg-blue-700 transition duration-300 hover:scale-105"
-            >
-              Get Started
-            </button>
-          ) : (
-            <button
-              type="submit"
-              class="bg-blue-600 text-white text-sm h-10 w-[130px] rounded-md font-semibold mt-5 shadow-md hover:bg-blue-700 transition duration-300 hover:scale-105"
-            >
-              Login
-            </button>
-          )}
+                      <option value="retailer">Retailer</option>
+                      <option value="electronic shop">Organisation</option>
+                      <option value="wholesale">Wholesaler</option>
+                    </select>
+                    {/* <label className="user-label">Select Industry</label> */}
+                  </div>
+                )}
+              </StyledWrapper>
+            </div>
+            <div className="mt-4 flex items-center">
+              <StyledWrapper>
+                <label className="container">
+                  <input type="checkbox" />
+                  <svg viewBox="0 0 64 64" height="1em" width="1em">
+                    <path
+                      d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                      pathLength="575.0541381835938"
+                      className="path"
+                    />
+                  </svg>
+                </label>
+              </StyledWrapper>
+              {
+                <label className="ml-2 text-sm text-gray-600" htmlFor="terms">
+                  I agree to the
+                  <a className="text-blue-600 hover:underline" href="#">
+                    Terms and Conditions
+                  </a>
+                </label>
+              }
+            </div>
+            {state === "sign up" ? (
+              <button
+                type="submit"
+                className="bg-blue-600 text-white text-sm h-10 w-[130px] rounded-md font-semibold mt-5 shadow-md hover:bg-blue-700 transition duration-300 hover:scale-105"
+              >
+                Get Started
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="bg-blue-600 text-white text-sm h-10 w-[130px] rounded-md font-semibold mt-5 shadow-md hover:bg-blue-700 transition duration-300 hover:scale-105"
+              >
+                Login
+              </button>
+            )}
+          </form>
         </div>
       </div>
     </div>
@@ -241,3 +288,5 @@ const StyledWrapper = styled.div`
 `;
 
 export default Registration;
+
+// export default Registration;
