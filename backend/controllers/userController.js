@@ -1,21 +1,43 @@
 const User = require("../models/userModal.js");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 exports.registerUser = async (req, res) => {
   try {
     const { name, email, password, industry } = req.body;
 
-    // Check if the user already exists
+    if (!name || !email || !password || !industry) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    // Validate EMAIL----------------
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    // Check if user already exists -----------------
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
+    //  Validate PASS -----------------
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        message: "Password Too Short.",
+      });
+    }
+
+    // Hash password  -------------------
+    const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS) || 10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create a new user
     const newUser = new User({
       name,
       email,
@@ -23,16 +45,31 @@ exports.registerUser = async (req, res) => {
       industry,
     });
 
-    // Save user to database
     await newUser.save();
 
-    res
-      .status(201)
-      .json({ message: "User registered successfully", user: newUser });
+    // 7️ Generate JWT Token---------
+    const token = jwt.sign(
+      { id: newUser._id, email: newUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // 8️ Send JSON response with token----------------
+    res.status(201).json({
+      message: "User registered successfully",
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        industry: newUser.industry,
+      },
+      token,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 // GET----------------------------
 
 exports.getUserByEmail = async (req, res) => {

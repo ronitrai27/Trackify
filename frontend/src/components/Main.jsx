@@ -2,13 +2,19 @@ import React from "react";
 import { assets } from "../assets/assets";
 import { LuChevronDown } from "react-icons/lu";
 import MyLocationMap from "./MyLocation";
+import Chatbot from "../chatbot/Chatbot";
+import { useAppContext } from "../context/AppContext";
 const Main = () => {
+  const { user, setUser } = useAppContext();
+
   return (
-    <div className="flex-1 h-screen bg-[#aebdd835] text-gray-800">
+    <div className="flex-1 h-screen bg-[#aebdd835] text-gray-800 relative">
       <div className="container py-6 px-4 flex justify-between">
         <div className="left-side w-full">
-          <h1 className="text-3xl mb-4">Welcome John!</h1>
-          <div className="bg-white h-screen w-[70%] rounded-lg"></div>
+          <h1 className="text-3xl mb-4 capitalize tracking-wide">
+            Welcome {user.name}
+          </h1>
+          {/* <div className="bg-white h-screen w-[70%] rounded-lg"></div> */}
         </div>
         <div className="right-side  w-[68%] shrink-0">
           {/* Increased width for right side */}
@@ -27,11 +33,12 @@ const Main = () => {
               <LuChevronDown />
             </div>
           </div>
-          <div className="p-2 bg-white h-[87vh] rounded-md shadow-md relative">
+          <div className="p-2 bg-white h-[80vh] rounded-md shadow-md relative overflow-hidden">
             <MyLocationMap />
           </div>
         </div>
       </div>
+      <Chatbot />
     </div>
   );
 };

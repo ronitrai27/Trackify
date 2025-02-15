@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,14 @@ const Registration = () => {
   const [industry, setIndustry] = useState("");
   const navigate = useNavigate();
 
+  //  Read localStorage on component mount ---- not req to refresh page
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
@@ -29,8 +37,12 @@ const Registration = () => {
       );
 
       console.log(response.data);
-      toast.success("registered successfully");
+      toast.success("Registered successfully");
+
       localStorage.setItem("userEmail", email);
+
+      setEmail(email);
+
       navigate("/");
     } catch (error) {
       console.error(error.response?.data?.message || "Registration failed");
@@ -40,7 +52,6 @@ const Registration = () => {
 
   return (
     <div className="border-t-[1px] bg-[#aebdd835] h-screen font-inter">
-      {/* <ToastContainer /> */}
       <div className="header-top flex items-center gap-2 px-10 mt-6">
         <img src={assets.logo} alt="" className="w-10" />
         <p className="text-[26px] font-semibold text-black tracking-tight">

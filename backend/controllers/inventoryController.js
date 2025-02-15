@@ -56,7 +56,7 @@ exports.getUserInventory = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    let filter = { userEmail }; // Base filter to fetch only the user's inventory
+    let filter = { userEmail };
 
     // Apply Filters
     if (type) filter.type = type;
@@ -72,7 +72,7 @@ exports.getUserInventory = async (req, res) => {
 
     // Pagination
     page = parseInt(page) || 1;
-    limit = parseInt(limit) || 8; // Default limit to 8 items per page
+    limit = parseInt(limit) || 8; // Default limit to 8 items per page-------
     const skip = (page - 1) * limit;
 
     // Fetch Data
@@ -96,7 +96,7 @@ exports.getUserInventory = async (req, res) => {
 //  Get items by count -------------------------------
 exports.getItemCountByType = async (req, res) => {
   try {
-    const { userEmail } = req.query; // Get user email from query params
+    const { userEmail } = req.query;
 
     if (!userEmail) {
       return res.status(400).json({ message: "User email is required" });
@@ -107,16 +107,16 @@ exports.getItemCountByType = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Aggregation to count items by type
+    // Aggregation to count items by type------------------
     const itemCounts = await Inventory.aggregate([
-      { $match: { userEmail } }, // Filter by user's email---
+      { $match: { userEmail } },
       {
         $group: {
           _id: { $toLower: "$type" },
           count: { $sum: 1 },
         },
       },
-      { $sort: { count: -1 } }, // Sort by highest count first----
+      { $sort: { count: -1 } },
     ]);
 
     res.status(200).json({ message: "Item counts by type", itemCounts });
