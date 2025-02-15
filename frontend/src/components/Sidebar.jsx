@@ -10,29 +10,6 @@ const Sidebar = () => {
   const handleSidebar = () => {
     setExpended(!expended);
   };
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const userEmail = localStorage.getItem("userEmail"); // Get stored email
-  //       if (!userEmail) {
-  //         console.warn("No user email found in localStorage");
-  //         return;
-  //       }
-
-  //       const response = await axios.get(
-  //         `http://localhost:5000/api/auth/user/email/${userEmail}`
-  //       );
-  //       setUser(response.data);
-  //     } catch (error) {
-  //       console.error(
-  //         "Error fetching user:",
-  //         error.response?.data?.message || error.message
-  //       );
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, []);
 
   return (
     <div
@@ -83,7 +60,7 @@ const Sidebar = () => {
         </div>
         <hr className="w-[80%] mx-auto border-b-[.6px] border-blue-500/30 mt-4 mb-3" />
         {/* Middle part ---- */}
-        <div className="middle mt-3 pl-4 pr-2 flex flex-col gap-4">
+        <div className="middle mt-3 pl-4 pr-2 flex flex-col gap-2">
           {/* 1----------------------------*/}
           <div className="cursor-pointer pl-2 relative group">
             <NavLink
@@ -238,7 +215,7 @@ const Sidebar = () => {
           </div>
           {/* AD-------------------- */}
           {expended ? (
-            <div className="ad py-4 w-full bg-gradient-to-br from-blue-300 via-blue-300 to-blue-600 rounded-xl shadow-md  px-2 mb-5">
+            <div className="ad py-4 w-full bg-gradient-to-br from-blue-300 via-blue-300 to-blue-600 rounded-xl shadow-md  px-2 mb-3">
               <p className="capitalize text-[18px] text-white font-medium tracking-tight leading-6">
                 Automate Everything with AI
               </p>
@@ -290,7 +267,7 @@ const Sidebar = () => {
             </NavLink>
           </div>
           {/* 6------------------------ */}
-          <div className="cursor-pointer pl-2 ">
+          <div className="cursor-pointer pl-2 mb-2">
             <div className="flex items-center gap-2 hover:translate-x-2 hover:scale-105 transition-all ">
               <assets.RiChatAiLine
                 className={`${
@@ -311,8 +288,38 @@ const Sidebar = () => {
               </p>
             </div>
           </div>
+          {/* 7---------------- */}
+          <div className="cursor-pointer pl-2 ">
+            <div className="flex items-center gap-2 hover:translate-x-2 hover:scale-105 transition-all ">
+              <assets.LuSettings2
+                className={`${
+                  expended
+                    ? "text-[1.2rem] lg:text-[1.5rem]"
+                    : "text-[1.4rem] lg:text-[1.7rem]"
+                }`}
+              />
+
+              <p
+                className={`text-sm lg:text-[0.95rem] transition-all  ${
+                  expended
+                    ? "max-w-full opacity-100"
+                    : "opacity-0 max-w-0 overflow-hidden"
+                }`}
+              >
+                Settings
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="bottom"></div>
+        <hr className="w-[80%] mx-auto border-b-[.6px] border-blue-500/30 mt-4" />
+        <div className="bottom flex items-center justify-center flex-grow mt-3">
+          <img src={assets.logo} alt="" className="w-8" />
+          {expended && (
+            <p className="text-[20px] font-semibold text-black tracking-tight">
+              Trackify
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

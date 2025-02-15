@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const inventorySchema = new mongoose.Schema(
   {
@@ -13,4 +13,4 @@ const inventorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Inventory", inventorySchema);
+module.exports = mongoose.model("Inventory", inventorySchema);

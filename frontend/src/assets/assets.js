@@ -7,6 +7,10 @@ import {
   LuWallet,
   LuSwatchBook,
   LuUser,
+  LuLogIn,
+  LuSettings2,
+  LuCircleFadingPlus,
+  LuSettings,
 } from "react-icons/lu";
 import { LuPanelRightClose, LuPanelRightOpen } from "react-icons/lu";
 import { RiChatAiLine } from "react-icons/ri";
@@ -24,4 +28,7 @@ export const assets = {
   LuSwatchBook,
   RiChatAiLine,
   LuUser,
+  LuSettings2,
+  LuCircleFadingPlus,
+  LuSettings2,
 };

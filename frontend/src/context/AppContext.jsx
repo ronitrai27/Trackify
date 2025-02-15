@@ -6,6 +6,7 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [theme, setTheme] = useState(true);
   const [user, setUser] = useState(null); // Store user data
+  const [location, setLocation] = useState(null);
 
   const toggleTheme = () => {
     setTheme(!theme);
@@ -32,11 +33,27 @@ export const AppProvider = ({ children }) => {
 
     fetchUser();
   }, []);
+  // Fetch user geolocation
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => console.error("Error getting location:", error),
+        { enableHighAccuracy: true }
+      );
+    }
+  }, []);
 
   const value = {
     theme,
     toggleTheme,
     user,
+    location,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
