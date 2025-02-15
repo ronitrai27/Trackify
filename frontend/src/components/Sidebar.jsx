@@ -29,7 +29,7 @@ const Sidebar = () => {
           </div>
         </div>
         {/* top part---- */}
-        <div className="top flex items-center justify-between px-2 mt-8 tracking-tight">
+        <div className="top flex items-center justify-between px-2 mt-6 tracking-tight">
           <img
             src={assets.user}
             alt=""
