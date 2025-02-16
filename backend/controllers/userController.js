@@ -54,7 +54,7 @@ exports.registerUser = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    // 8️ Send JSON response with token----------------
+    //  Sending JSON response with token----------------
     res.status(201).json({
       message: "User registered successfully",
       user: {

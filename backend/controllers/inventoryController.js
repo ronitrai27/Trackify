@@ -1,6 +1,6 @@
 const Inventory = require("../models/InventoryModal");
 const User = require("../models/userModal");
-
+// --ADDITEMS-----------------
 exports.addItem = async (req, res) => {
   try {
     const { productName, type, quantity, price, sellingPrice, shipmentName } =
@@ -41,10 +41,10 @@ exports.addItem = async (req, res) => {
     res.status(500).json({ message: "Error adding item", error });
   }
 };
-// get items (pagination , filtering , sorting)----------------------
+// -------------------------get items (pagination , filtering , sorting)----------------------
 exports.getUserInventory = async (req, res) => {
   try {
-    const { userEmail } = req.query; // Get user's email from query params
+    const { userEmail } = req.query;
     let { type, minPrice, maxPrice, sortBy, page, limit } = req.query;
 
     if (!userEmail) {
@@ -93,7 +93,7 @@ exports.getUserInventory = async (req, res) => {
     res.status(500).json({ message: "Error fetching inventory", error });
   }
 };
-//  Get items by count -------------------------------
+//  -------------------------------Get items by count -------------------------------
 exports.getItemCountByType = async (req, res) => {
   try {
     const { userEmail } = req.query;
