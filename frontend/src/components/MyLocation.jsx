@@ -81,9 +81,9 @@ function MyLocationMap() {
       console.error("Geolocation is not supported by this browser.");
     }
   }, []);
-
+  //
   return (
-    <LoadScript googleMapsApiKey="AIzaSyAKUcB9_htfm4sbJbuHcObjSOKXwhdEwfQ">
+    <LoadScript googleMapsApiKey="Google_Key">
       {currentLocation ? (
         <GoogleMap
           mapContainerStyle={containerStyle}
